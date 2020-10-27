@@ -67,7 +67,7 @@
               ></el-col>
               <el-col :span="9"
                 ><div class="grid-content bg-purple">
-                  <el-button type="success" size="small" @click="getSms()" class="block_buttom"
+                  <el-button type="success" size="small" class="block_buttom"
                     >获取验证码</el-button
                   >
                 </div></el-col
@@ -77,10 +77,9 @@
           <el-form-item>
             <el-button
               type="danger"
-              :disabled="isdisabled"
               @click="submitForm('ruleForm')"
               class="block_buttom login-btn"
-              >{{model=="login"?"登录":"注册"}}</el-button
+              >登录</el-button
             >
           </el-form-item>
         </el-form>
@@ -89,10 +88,8 @@
   </div>
 </template>
 <script>
-import { Message } from 'element-ui';
-import { onMounted,  reactive , ref} from "@vue/composition-api";
+import {  onMounted,  reactive , ref} from "@vue/composition-api";
 import { Strscript, ValidateEmail } from "@/utils/validate";
-import { GetEmail } from "@/api/login";
 export default {
   name: "login",
   setup(props, context) {
@@ -155,7 +152,6 @@ export default {
       { txt: "注册", current: false, eng: "reg" }
     ]);
     const model = ref("login"); //基础数据用 ref
-    const isdisabled=ref(true);
     const ruleForm = reactive({
       username: "",
       password: "",
@@ -196,30 +192,7 @@ export default {
     /**
      * 生命周期
      */
-    onMounted(() => {
-      
-    });
-
-   /**
-    * 获取验证码
-    */
-   const getSms=()=>{
-     //先进行提示
-     if(!ruleForm.username)
-     {
-       context.root.$message.error('邮箱不能为空的哦~');
-       return;
-     }
-     let data={
-       username:ruleForm.username
-     };
-     GetEmail(data);
-   }
-
-    /**
-     * 提交表单
-     */
-
+    onMounted(() => {});
     return {
       tabs,
       model,
@@ -227,9 +200,7 @@ export default {
       submitForm,
       ruleForm,
       isActive,
-      rules,
-      getSms,
-      isdisabled,
+      rules
     };
   },
 };
