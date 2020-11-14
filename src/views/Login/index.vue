@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <div style="height:150px"></div>
+    <div style="height: 150px"></div>
     <div class="login-wrap">
       <ul class="menu-tab">
         <li
@@ -33,7 +33,7 @@
 
           <el-form-item prop="password" label="密码">
             <el-input
-              type="text"
+              type="password"
               v-model="ruleForm.password"
               autocomplete="off"
               maxlength="20"
@@ -44,10 +44,10 @@
           <el-form-item
             prop="passwords"
             label="重复密码"
-            v-if="model === 'reg'"
+            v-if="model == 'register'"
           >
             <el-input
-              type="text"
+              type="password"
               v-model="ruleForm.passwords"
               autocomplete="off"
               maxlength="20"
@@ -67,8 +67,13 @@
               ></el-col>
               <el-col :span="9"
                 ><div class="grid-content bg-purple">
-                  <el-button type="success" size="small" @click="getSms()" class="block_buttom"
-                    >获取验证码</el-button
+                  <el-button
+                    type="success"
+                    size="small"
+                    @click="getSms()"
+                    class="block_buttom"
+                    :disabled="codeStatus.status"
+                    >{{ codeStatus.text }}</el-button
                   >
                 </div></el-col
               >
@@ -80,7 +85,7 @@
               :disabled="isdisabled"
               @click="submitForm('ruleForm')"
               class="block_buttom login-btn"
-              >{{model=="login"?"登录":"注册"}}</el-button
+              >{{ model == "login" ? "登录" : "注册" }}</el-button
             >
           </el-form-item>
         </el-form>
@@ -89,16 +94,17 @@
   </div>
 </template>
 <script>
-import { Message } from 'element-ui';
-import { onMounted,  reactive , ref} from "@vue/composition-api";
+import sha1 from "js-sha1";
+import { Message } from "element-ui";
+import { onMounted, reactive, ref } from "@vue/composition-api";
 import { Strscript, ValidateEmail } from "@/utils/validate";
-import { GetEmail } from "@/api/login";
+import { GetEmail, Register, Login } from "@/api/login";
 export default {
   name: "login",
   setup(props, context) {
     //这里放置data数据，生命周期，自定义的函数
 
-//验证吗
+    //验证吗
     let checkCode = (rule, value, callback) => {
       let codecheck = /^[a-z0-9]{6}$/;
       if (!value) {
@@ -145,81 +151,173 @@ export default {
       }
     };
 
-
     /**
      * 声明数据
      */
     const tabs = reactive([
       //对象数据类型用 reactive
       { txt: "登录", current: true, eng: "login" },
-      { txt: "注册", current: false, eng: "reg" }
+      { txt: "注册", current: false, eng: "register" },
     ]);
     const model = ref("login"); //基础数据用 ref
-    const isdisabled=ref(true);
+    const isdisabled = ref(true);
     const ruleForm = reactive({
       username: "",
       password: "",
       passwords: "",
-      code: ""
+      code: "",
     });
     const isActive = true;
-    const rules =reactive({
+    const rules = reactive({
       username: [{ validator: validateUsername, trigger: "blur" }],
       password: [{ validator: validatePass2, trigger: "blur" }],
       passwords: [{ validator: validatePass3, trigger: "blur" }],
-      code: [{ validator: checkCode, trigger: "blur" }]
+      code: [{ validator: checkCode, trigger: "blur" }],
     });
 
+    const codeStatus = reactive({
+      text: "获取验证码",
+      status: false,
+    });
+
+    let timer;
 
     /**
      * 声明函数
      */
-    const TabToggle = data => {
-      tabs.forEach(elem=> {
+    const TabToggle = (data) => {
+      tabs.forEach((elem) => {
         elem.current = false;
       });
       data.current = true;
       model.value = data.eng;
+      resetForm();
       // console.log(data);
     };
 
-    const submitForm = formName => {
-      context.refs[formName].validate(valid => {
+    //重置表单
+    const resetForm = () => {
+      context.refs.ruleForm.resetFields();
+    };
+    //倒计时
+    const countDown = (number) => {
+      let time = number;
+      timer = setInterval(() => {
+        time--;
+        if (time === 0) {
+          clearInterval(timer);
+          updateCodeStatus("重新获取",false);
+        } else {
+          updateCodeStatus(`倒计时${time}秒`,true);
+        }
+      }, 1000);
+    };
+
+    //清除倒计时
+    const clearDown = () => {
+      //还原验证状态
+      updateCodeStatus("获取验证码",false);
+      clearInterval(timer);
+    };
+
+    const updateCodeStatus=((text,istrue)=>{
+      codeStatus.status = istrue;
+      codeStatus.text = text;
+    })
+
+    /**
+     * 生命周期
+     */
+    onMounted(() => {});
+
+    /**
+     * 获取验证码
+     */
+    const getSms = () => {
+      //先进行提示
+      if (!ruleForm.username) {
+        context.root.$message.error("邮箱不能为空的哦~");
+        return;
+      }
+      if (!ValidateEmail(ruleForm.username)) {
+        context.root.$message.error("邮箱格式是错误的哦~");
+        return;
+      }
+      let data = {
+        username: ruleForm.username,
+        module: model.value,
+      };
+      updateCodeStatus("发送中");
+      setTimeout(() => {
+        GetEmail(data)
+          .then((response) => {
+            let data = response.data;
+            context.root.$message.success(data.message);
+            countDown(60);
+            isdisabled.value = false;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }, 3000);
+    };
+
+    const submitForm = (formName) => {
+      context.refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          model.value === "login" ? login() : register();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     };
-    /**
-     * 生命周期
-     */
-    onMounted(() => {
-      
-    });
-
-   /**
-    * 获取验证码
-    */
-   const getSms=()=>{
-     //先进行提示
-     if(!ruleForm.username)
-     {
-       context.root.$message.error('邮箱不能为空的哦~');
-       return;
-     }
-     let data={
-       username:ruleForm.username
-     };
-     GetEmail(data);
-   }
+    //注册
+    const register = () => {
+      let data = {
+        username: ruleForm.username,
+        password: sha1(ruleForm.password),
+        passwords: ruleForm.passwords,
+        code: ruleForm.code,
+        model: model.value,
+      };
+      Register(data)
+        .then((response) => {
+          let data = response.data;
+          context.root.$message.success(data.message);
+          // model.value="login";
+          TabToggle(tabs[0]);
+          clearDown();
+          isdisabled.value = true;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    //登录
+    const login = () => {
+      let data = {
+        username: ruleForm.username,
+        password: sha1(ruleForm.password),
+        code: ruleForm.code,
+      };
+      Login(data)
+        .then((response) => {
+          let data = response.data;
+          context.root.$message.success(data.message);
+          clearDown();
+          context.root.$router.push({
+            name:"Console"
+          });
+        })
+        .then((error) => {
+          console.log(error);
+        });
+    };
 
     /**
      * 提交表单
      */
-
     return {
       tabs,
       model,
@@ -230,6 +328,7 @@ export default {
       rules,
       getSms,
       isdisabled,
+      codeStatus,
     };
   },
 };
