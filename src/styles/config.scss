@@ -1,3 +1,14 @@
-$color:rgb(245, 201, 148);
 //后台框架尺寸
 $navWidth:200px;
+$navMinWidth:65px;
+//主色调
+$backcolor:#f5c994;
+$maincolor:#ebb136;
+$graycolor:#666666;
+@mixin webkit($type, $value) {
+    -webkit-#{$type}: $value;
+    -moz-#{$type}: $value;
+    -o-#{$type}: $value;
+    -ms-#{$type}: $value;
+    #{$type}: $value;
+}

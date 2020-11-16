@@ -33,6 +33,7 @@ module.exports = {
             extensions: ['js', 'css', 'vue'], //自动添加后缀名
             alias: {
                 // 别名
+                // "vue": "vue/dist/vue.js",
                 "@": path.resolve(__dirname, "./src"),
                 "@c": path.resolve(__dirname, "./src/components"),
                 'api': path.resolve(__dirname, './src/api'),

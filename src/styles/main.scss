@@ -1,2 +1,14 @@
 @import "./basics.scss";
 @import "./config.scss";
+@import "./element.scss";
+.fl-left {
+    float: left;
+}
+
+.fl-right {
+    float: right;
+}
+
+.gray {
+    color: #666666;
+}

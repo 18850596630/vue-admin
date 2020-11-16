@@ -356,7 +356,7 @@ export default {
     cursor: pointer;
   }
   .current {
-    background-color: rgb(235, 177, 54);
+    background-color: #ebb136;
   }
 }
 .login-form {

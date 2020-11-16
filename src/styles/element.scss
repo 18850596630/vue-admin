@@ -1,0 +1,17 @@
+.el-submenu .el-menu-item {
+    font-size: 14px;
+    padding-left: 48px !important;
+    &.is-active {
+        background-color: #e0b76467 !important;
+    }
+}
+
+li.el-submenu {
+    &.is-active.is-opened .el-submenu__title {
+        background-color: #ebb136 !important;
+    }
+}
+
+.el-submenu__title i {
+    color: #ffffff !important;
+}
