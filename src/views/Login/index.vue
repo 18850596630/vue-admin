@@ -301,18 +301,19 @@ export default {
         password: sha1(ruleForm.password),
         code: ruleForm.code,
       };
-      Login(data)
-        .then((response) => {
-          let data = response.data;
-          context.root.$message.success(data.message);
-          clearDown();
-          context.root.$router.push({
-            name:"Console"
-          });
-        })
-        .then((error) => {
-          console.log(error);
+      context.root.$store.dispatch('setLogin',data)
+      .then((response) => {
+        let data = response.data;
+        context.root.$message.success(data.message);
+        context.root.$router.push({
+          name:"Console"
         });
+      })
+      .then((error) => {
+        console.log(error);
+      });
+      // Login(data)
+
     };
 
     /**

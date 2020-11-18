@@ -1,6 +1,6 @@
 <template>
     <div id="header-wrap">
-        <div class="fl-left header-icon" @click="NavChange()"><i class="el-icon el-icon-s-fold"></i></div>
+        <div class="fl-left header-icon" @click="NavChange"><i class="el-icon el-icon-s-fold"></i></div>
         <div class="fl-right">
             <div class="user-icon fl-left">管理员</div>
             <div class="header-icon fl-left">
@@ -12,9 +12,10 @@
 
 <script>
 export default {
-    setup(props,{root}){
+    setup(props,{ root }){
         const NavChange=()=>{
             root.$store.commit('SET_isCollapse');
+            // root.$store.dispatch('setStatus');
         }
         return {
             NavChange

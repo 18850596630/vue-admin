@@ -21,7 +21,7 @@ export default {
     },
     setup(props,{root})
     {
-        const MenuStatus = computed(()=> root.$store.state.isCollapse);
+        const MenuStatus = computed(()=> root.$store.state.app.isCollapse);
 
         return {
             MenuStatus
