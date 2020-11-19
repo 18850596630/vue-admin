@@ -1,6 +1,6 @@
 const login = {
     state: {
-        test: "12345"
+
     },
     getters: { //computed
 

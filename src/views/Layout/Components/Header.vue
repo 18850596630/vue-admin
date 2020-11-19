@@ -14,7 +14,7 @@
 export default {
     setup(props,{ root }){
         const NavChange=()=>{
-            root.$store.commit('SET_isCollapse');
+            root.$store.commit('app/SET_isCollapse');
             // root.$store.dispatch('setStatus');
         }
         return {

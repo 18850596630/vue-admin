@@ -301,7 +301,7 @@ export default {
         password: sha1(ruleForm.password),
         code: ruleForm.code,
       };
-      context.root.$store.dispatch('setLogin',data)
+      context.root.$store.dispatch('app/setLogin',data)
       .then((response) => {
         let data = response.data;
         context.root.$message.success(data.message);

@@ -1,7 +1,6 @@
 <template>
     <div id="main-wrap">
         <div class="content">
-            {{ test }}
             <router-view />
         </div>
     </div>
@@ -14,11 +13,7 @@ export default {
     {
         // JSON.stringify()  JSON 对象转化 字符串格式
         // JSON.parse()    字符串 转化 JSON 对象
-
-        const test=root.$store.state.login.test;
-        return {
-            test
-        }
+       
     }
     
 }
