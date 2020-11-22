@@ -1,15 +1,14 @@
-import Cookie from "cookie_js";
-import { Login } from "@/api/login.js";
-
+import { Login } from "@/api/login";
+import { setToken, setUserName, getUserName, removeToken, removeUserName } from "@/utils/app";
 
 const state = {
     isCollapse: JSON.parse(sessionStorage.getItem('isCollapse')) || false,
     to_ken: "",
-    username: "",
+    username: getUserName() || '',
 };
 
 const getters = { //computed
-    count: state => state.count + 1, //ES6    
+    isCollapse: state => state.isCollapse, //ES6   
 };
 
 const mutations = {
@@ -24,6 +23,9 @@ const mutations = {
     },
     SET_USERNAME(state, value) {
         state.username = value;
+    },
+    REMOVE_TOKEN(state) {
+        state.to_ken = "";
     }
 };
 
@@ -32,13 +34,26 @@ const actions = {
         return new Promise((resolve, reject) => {
             Login(data).then((response) => {
                 let data = response.data.data;
-                content.commit('SET_TOKEN', data.username);
-                console.log(response);
+                content.commit('SET_TOKEN', data.token);
+                content.commit('SET_USERNAME', data.username);
+                setToken(data.token);
+                setUserName(data.username);
                 resolve(response);
             }).catch((error) => {
                 reject(error);
             })
         })
+    },
+    exit({ commit }) {
+        return new Promise((resolve, reject) => {
+            removeToken();
+            removeUserName();
+            commit('SET_TOKEN', "");
+            commit('SET_USERNAME', "");
+            resolve();
+
+        });
+
     }
 }
 

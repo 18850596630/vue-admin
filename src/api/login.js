@@ -6,7 +6,7 @@ import service from '@/utils/request';
 export function GetEmail(data) {
     return service.request({
         method: "post",
-        url: "/getSms/",
+        url: "/getCode/",
         data //data:data  左边变量data是后台接收的 ， 右边的data是接收参数
     })
 }

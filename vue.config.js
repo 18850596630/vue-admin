@@ -40,7 +40,7 @@ module.exports = {
             }
         }
     },
-    // webpack-dev-server 相关配置
+    // webpack-dev-server 相关配置  http://laral.jingani.cn/api/vueadmin
     devServer: {
         open: false,
         host: "0.0.0.0",
@@ -50,7 +50,7 @@ module.exports = {
         hotOnly: false,
         proxy: {
             '/api': {
-                target: "http://www.web-jshtml.cn/productapi", //api的服务器地址
+                target: "http://laral.jingani.cn/api/vueadmin", //api的服务器地址
                 changeOrigin: true,
                 pathRewrite: {
                     "^/api": "",

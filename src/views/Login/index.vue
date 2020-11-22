@@ -284,6 +284,7 @@ export default {
       Register(data)
         .then((response) => {
           let data = response.data;
+          console.log(data);
           context.root.$message.success(data.message);
           // model.value="login";
           TabToggle(tabs[0]);

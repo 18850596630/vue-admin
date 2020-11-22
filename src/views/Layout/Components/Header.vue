@@ -2,8 +2,8 @@
     <div id="header-wrap">
         <div class="fl-left header-icon" @click="NavChange"><i class="el-icon el-icon-s-fold"></i></div>
         <div class="fl-right">
-            <div class="user-icon fl-left">管理员</div>
-            <div class="header-icon fl-left">
+            <div class="user-icon fl-left">{{username}}</div>
+            <div class="header-icon fl-left" @click="Exit">
                 <i class="el-icon el-icon-switch-button gray"></i>
             </div>
         </div>
@@ -11,14 +11,35 @@
 </template>
 
 <script>
+import { computed } from '@vue/composition-api';
 export default {
     setup(props,{ root }){
         const NavChange=()=>{
             root.$store.commit('app/SET_isCollapse');
-            // root.$store.dispatch('setStatus');
+        };
+        const Exit=()=>{
+            root.$confirm("确认退出?","提示",{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(()=>{
+                root.$store.dispatch('app/exit').then(()=>{
+                    root.$message.success("退出成功")
+                    root.$router.push({
+                        name:"Login"
+                    })
+                });
+            }).catch(()=>{
+                root.$message.info("取消成功")
+            })
+          
+
         }
+        const username=computed(()=>root.$store.state.app.username);
         return {
-            NavChange
+            NavChange,
+            username,
+            Exit,
         }
     }
 }
