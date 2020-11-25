@@ -29,3 +29,68 @@ li.el-submenu {
         background-color: #ebb136 !important;
     }
 }
+
+// 选择器
+.el-select {
+    .el-input.is-focus .el-input__inner {
+        border-color: #ebb136 !important;
+    }
+    .el-select .el-input__inner:focus {
+        border-color: #ebb136 !important;
+    }
+    .el-input__inner:focus {
+        border-color: #ebb136 !important;
+    }
+}
+
+.el-select-dropdown__item.selected {
+    color: darkorange !important;
+}
+
+//日期选择   #fff8ef
+.el-date-table {
+    td {
+        &.start-date span,
+        &.end-date span {
+            background-color: darkorange !important;
+        }
+        &.today span {
+            color: darkorange !important;
+        }
+        &.in-range div {
+            background-color: #fff8ef !important;
+        }
+    }
+}
+
+.el-range-editor.is-active {
+    border-color: #ebb136 !important;
+}
+
+//输入框
+.el-input__inner:focus {
+    border-color: #ebb136 !important;
+}
+
+//表格
+div.el-table {
+    td,
+    th {
+        text-align: center;
+    }
+    th {
+        font-weight: bold;
+        color: #343434;
+    }
+    .el-checkbox__inner:hover {
+        border-color: #ebb136 !important;
+    }
+    .el-checkbox__input.is-checked .el-checkbox__inner {
+        border-color: #ebb136 !important;
+        background-color: #ebb136 !important;
+    }
+    .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+        border-color: #ebb136 !important;
+        background-color: #ebb136 !important;
+    }
+}
