@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
+import { getToken, getUserName } from "@/utils/app";
 
 
 //前端api地址 http://www.web-jshtml.cn/productApi
@@ -17,7 +18,8 @@ const service = axios.create({
 service.interceptors.request.use(function(config) {
     //请求之前  做些什么
     //后台需要前端 传相关参数
-    config.headers['token'] = '121212';
+    config.headers['token'] = getToken();
+    config.headers['username'] = getUserName();
     return config;
 }, function(error) {
     return Promise.reject(error);

@@ -40,7 +40,6 @@ module.exports = {
             }
         }
     },
-    // webpack-dev-server 相关配置  http://laral.jingani.cn/api/vueadmin
     devServer: {
         open: false,
         host: "0.0.0.0",

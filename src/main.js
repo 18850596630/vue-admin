@@ -6,10 +6,13 @@ import store from "./store";
 import "./plugins/element.js";
 import "./router/premit.js";
 
+//自定义全局方法
+// import global from "@/utils/global.js";
+// Vue.use(global);
 //自定义全局组件
+
 Vue.use(VueComposition);
 Vue.config.productionTip = false;
-
 
 new Vue({
     router,

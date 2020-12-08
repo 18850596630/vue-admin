@@ -94,3 +94,34 @@ div.el-table {
         background-color: #ebb136 !important;
     }
 }
+
+//Dialog 弹窗
+.el-dialog__wrapper {
+    .el-dialog__body {
+        padding: 30px 47px !important;
+    }
+    .el-dialog__footer {
+        text-align: center;
+    }
+    .el-button {
+        padding: 8px 40px;
+        margin: 0 12px !important;
+    }
+}
+
+//按钮
+.el-button--primary {
+    background-color: #ebb136;
+    border-color: #ebb136;
+    transition: all .4s ease-in;
+}
+
+.el-button--primary:hover,
+.el-button--primary:focus {
+    background-color: darkorange;
+    border-color: darkorange;
+}
+
+.el-textarea__inner:focus {
+    border-color: #ebb136;
+}

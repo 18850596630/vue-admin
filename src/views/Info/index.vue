@@ -61,7 +61,11 @@
       </el-col>
       <el-col :span="3">&nbsp;</el-col>
       <el-col :span="2">
-        <el-button type="danger" class="fl-right" style="width: 100%" @click="dialogInfo=true"
+        <el-button
+          type="danger"
+          class="fl-right"
+          style="width: 100%"
+          @click="dialog_info = true"
           >添加</el-button
         >
       </el-col>
@@ -82,13 +86,8 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
+          <el-button size="mini" @click="dialog_info = true">编辑</el-button>
+          <el-button size="mini" type="danger" @click="delete_info"
             >删除</el-button
           >
         </template>
@@ -99,7 +98,7 @@
     <div class="black-space-30"></div>
     <el-row>
       <el-col :span="12">
-        <el-button type="danger" plain>批量删除</el-button>
+        <el-button type="danger" plain @click="detele_all">批量删除</el-button>
       </el-col>
       <el-col :span="12">
         <el-pagination
@@ -116,25 +115,27 @@
     </el-row>
 
     <!-- 弹窗 -->
-    <el-dialog title="收货地址" :visible.sync="dialogInfo">
-     csfdfdv
-    </el-dialog>
+    <DialogInfo :flag.sync="dialog_info" />
   </div>
 </template>
 
 <script>
-import { reactive, ref } from "@vue/composition-api";
+import DialogInfo from "./dialog/info";
+import { reactive, ref , watch} from "@vue/composition-api";
+import { global } from "@/utils/global_3";
 export default {
   name: "Infoindex",
+  components: {
+    DialogInfo,
+  },
   setup(content, { root }) {
+    const dialog_info = ref(false);
     const value = ref("");
     const formInline = ref("left");
     const timeDate = ref("");
 
     const search_key = ref("id");
     const search_word = ref("");
-    const dialogInfo=ref(false);
-
     const searchOptions = reactive([
       { value: "id", label: "ID" },
       { value: "title", label: "标题" },
@@ -182,6 +183,33 @@ export default {
       },
     ]);
 
+    const delete_info = () => {
+      confirm({
+       content: "确认删除当前信息?",
+        tip: "警告",
+        fn: confirmDelete,
+        id: 333,
+      });
+    };
+    const detele_all = () => {
+      confirm({   //3.0 注册方法
+        content: "确认删除已选中的信息？",
+        type: "warning",
+        fn: confirmDelete,
+        id: 11111,
+      });
+      // root.confirm({   //全局注册方法
+      //   content: "确认删除已选中的信息？",
+      //   type: "warning",
+      //   fn: confirmDelete,
+      //   id:11111
+      // });
+    };
+
+    const confirmDelete = (value) => {
+      console.log(value);
+    };
+
     const handleSizeChange = (val) => {
       console.log(val);
     };
@@ -189,12 +217,19 @@ export default {
       console.log(val);
     };
 
+    const { confirm, str:aaa } = global();
+    watch(()=>{
+      console.log(aaa.value);
+    });
+
     return {
       value,
       formInline,
       search_key,
       search_word,
-      dialogInfo,
+      dialog_info,
+      delete_info,
+      detele_all,
       timeDate,
       tableData,
       options,
